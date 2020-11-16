@@ -13,18 +13,18 @@ public class Main {
 
         UserServiceImpl userService = new UserServiceImpl();
 
-      //  userService.dropUsersTable();
+
         userService.createUsersTable();
         userService.saveUser("Sasawwha", "adDzdaen", (byte) 11);
         userService.saveUser("Sadwasha", "Dzwaen", (byte) 121);
         userService.saveUser("Saadaa", "D1zen", (byte) 111);
         userService.saveUser("Sadasha", "1eddaDzen", (byte) 5);
         userService.getAllUsers();
-        userService.removeUserById(3);
+        userService.removeUserById(2);
         userService.getAllUsers();
         userService.cleanUsersTable();
-        userService.getAllUsers();
-        userService.dropUsersTable();
+//        userService.getAllUsers();
+//        userService.dropUsersTable();
 
     }
 }

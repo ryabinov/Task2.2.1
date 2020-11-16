@@ -1,19 +1,15 @@
 package jm.task.core.jdbc.dao;
 
-import com.sun.jdi.connect.Connector;
 import jm.task.core.jdbc.model.User;
-import jm.task.core.jdbc.service.UserServiceImpl;
 import jm.task.core.jdbc.util.Util;
 import org.hibernate.*;
 
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoHibernateImpl extends Util implements UserDao {
-    private SessionFactory sessionFactory;
+    private SessionFactory sessionFactory = Util.getSessionFactory();
 
 
     public UserDaoHibernateImpl() {
@@ -21,141 +17,101 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
     }
 
     @Override
-    public void createUsersTable() throws SQLException{
-
-        Session session = session = Util.getSessionFactory().openSession();
-        Transaction transaction = null;
+    public void createUsersTable() throws SQLException {
 
         try {
-            transaction = session.beginTransaction();
-            Query query = session.createSQLQuery("CREATE TABLE IF NOT EXISTS user"+
-                "(id INT PRIMARY KEY," +
-                "name VARCHAR(50)," +
-                "lastName VARCHAR(50)," +
-                "age INT)");
-            query.executeUpdate();
-            transaction.commit();
-            session.close();
-           // System.out.println("создал таблицу user");
+            sessionFactory.getCurrentSession().beginTransaction();
+            sessionFactory.getCurrentSession().createSQLQuery("CREATE TABLE IF NOT EXISTS user" +
+                    "(id INT PRIMARY KEY," +
+                    "name VARCHAR(50)," +
+                    "lastName VARCHAR(50)," +
+                    "age INT)").executeUpdate();
+            sessionFactory.getCurrentSession().getTransaction().commit();
+            System.out.println("Таблица добавлена");
         } catch (HibernateException e) {
-
+            sessionFactory.getCurrentSession().getTransaction().rollback();
             e.printStackTrace();
         }
     }
 
     @Override
     public void dropUsersTable() {
-        String dropUT = "DROP TABLE IF EXISTS user";
-        Session session = null;
-        try {
-            session = Util.getSessionFactory().openSession();
-            session.beginTransaction();
-            SQLQuery sqlQuery = session.createSQLQuery(dropUT);
-          //  System.out.println("Удалил таблицу hiber" +"\n");
-            sqlQuery.executeUpdate();
 
+        try {
+            sessionFactory.getCurrentSession().beginTransaction();
+            sessionFactory.getCurrentSession().createSQLQuery("DROP TABLE IF EXISTS user").executeUpdate();
+            sessionFactory.getCurrentSession().getTransaction().commit();
+            System.out.println("Таблица удалена");
         } catch (Exception e) {
+            sessionFactory.getCurrentSession().getTransaction().rollback();
             e.printStackTrace();
-        }finally {
-            session.close();
         }
     }
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        User user = new User();
-        user.setName(name);
-        user.setLastName(lastName);
-        user.setAge(age);
-        Session session = Util.getSessionFactory().openSession();
-        Transaction transaction = null;
-
+//
         try {
-            transaction = session.beginTransaction();
-            session.save(user);
-            transaction.commit();
-            //System.out.println(user + " добавлен в таблицу!!!" +"\n");
-
+            sessionFactory.getCurrentSession().beginTransaction();
+            sessionFactory.getCurrentSession().persist(new User(name, lastName, age));
+            sessionFactory.getCurrentSession().getTransaction().commit();
+            System.out.println("User добавлен в таблицу!!!" + "\n");
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
+            sessionFactory.getCurrentSession().getTransaction().rollback();
             e.printStackTrace();
-        }finally {
-            session.close();
         }
     }
 
     @Override
     public void removeUserById(long id) {
-        Session session = Util.getSessionFactory().openSession();
-        Transaction transaction = null;
 
         try {
-            transaction = session.beginTransaction();
-            User user = (User) session.load(User.class, id);
-            session.delete(user);
-            transaction.commit();
-          //  System.out.println(user + " удалет по id: "+ id +"\n");
-
+            sessionFactory.getCurrentSession().beginTransaction();
+            User user = (User) sessionFactory.getCurrentSession().load(User.class, id);
+            sessionFactory.getCurrentSession().delete(user);
+            sessionFactory.getCurrentSession().getTransaction().commit();
+            System.out.println(user + " удалет по id: " + id + "\n");
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
+            sessionFactory.getCurrentSession().getTransaction().rollback();
             e.printStackTrace();
-        }finally {
-            session.close();
         }
     }
 
     @Override
     public List<User> getAllUsers() {
-        Session session = Util.getSessionFactory().openSession();
-        List<User> userList = session.createQuery("from User").list();
-        Transaction transaction = null;
+        List<User> userList = null;
         try {
-            transaction = session.beginTransaction();
-
-            for (User u : userList) {
-                //   System.out.println("Users находящиеся в таблицы: " + u +"\n");
-            }
-
-        } catch (Exception e) {if (transaction != null) {
-            transaction.rollback();
-        }
+            sessionFactory.getCurrentSession().beginTransaction();
+            userList = sessionFactory.getCurrentSession().createQuery("from User").list();
+            sessionFactory.getCurrentSession().getTransaction().commit();
+            System.out.println("Users находящиеся в таблицы: " + userList + "\n");
+        } catch (Exception e) {
+            sessionFactory.getCurrentSession().getTransaction().rollback();
             e.printStackTrace();
         }
+
         return userList;
     }
 
+
     @Override
     public void cleanUsersTable() {
-        Transaction transaction = null;
-        Session session = Util.getSessionFactory().openSession();
 
         try {
-            transaction = session.beginTransaction();
-            List<User> userList = session.createQuery("from User").list();
-            for(User u : userList){
-                session.delete(u);
-              //  System.out.println(u+ " Удален!" +"\n");
+            sessionFactory.getCurrentSession().beginTransaction();
+
+            List<User> userList = sessionFactory.getCurrentSession().createQuery("from User").list();
+            for (User u : userList) {
+                sessionFactory.getCurrentSession().delete(u);
+                System.out.println(u + " Удален!" + "\n");
             }
-
-            transaction.commit();
-
-
+            sessionFactory.getCurrentSession().getTransaction().commit();
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
+            sessionFactory.getCurrentSession().getTransaction().rollback();
             e.printStackTrace();
-        } finally {
-            session.close();
         }
     }
 }
-
-
 
 
 //://www.journaldev.com/3531/spring-mvc-hibernate-mysql-integration-crud-example-tutorial
