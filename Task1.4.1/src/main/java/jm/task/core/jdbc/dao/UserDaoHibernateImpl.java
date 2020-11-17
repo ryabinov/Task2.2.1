@@ -22,7 +22,7 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
         try {
             sessionFactory.getCurrentSession().beginTransaction();
             sessionFactory.getCurrentSession().createSQLQuery("CREATE TABLE IF NOT EXISTS user" +
-                    "(id INT PRIMARY KEY," +
+                    "(id INT PRIMARY KEY AUTO_INCREMENT," +
                     "name VARCHAR(50)," +
                     "lastName VARCHAR(50)," +
                     "age INT)").executeUpdate();
@@ -50,7 +50,7 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-//
+
         try {
             sessionFactory.getCurrentSession().beginTransaction();
             sessionFactory.getCurrentSession().persist(new User(name, lastName, age));
