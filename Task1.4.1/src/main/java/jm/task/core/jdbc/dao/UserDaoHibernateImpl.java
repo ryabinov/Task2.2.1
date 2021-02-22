@@ -9,8 +9,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class UserDaoHibernateImpl extends Util implements UserDao {
-    private SessionFactory sessionFactory = Util.getSessionFactory();
 
+    private SessionFactory sessionFactory = Util.getSessionFactory();
 
     public UserDaoHibernateImpl() {
 
