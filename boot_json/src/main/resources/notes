@@ -1,0 +1,19 @@
+Короче eсть задания:
+1. получаем заголовок, чтото типа JSESSIONID=1B610F32BE3493739431499220684EF1; Path=/; HttpOnly
+2. создаем свой заголовок где имя Cookie а значение : JSESSIONID=1B610F32BE3493739431499220684EF1;
+ Path=/; HttpOnly
+3. прикрепляем этот заголовок к своим запросам, в ответе получаем ключи
+
+чтобы получить код, выводим в консоль response, будет сразу за кодом состояния
+
+Во первых тот код set-cookie который мы получили вначале, при получении списка всех юзеров,
+мы используем в дальнейшем. Только его. Надо использовать все тело set-cookie.
+Во вторых клиент код сессии уже возвращает не в Set-cookie, а в  Cookie.
+
+https://www.baeldung.com/rest-template
+https://www.javaguides.net/2019/06/spring-resttemplate-get-post-put-and-delete-example.html
+
+https://code.tutsplus.com/ru/tutorials/http-headers-for-dummies--net-8039
+
+
+https://gist.github.com/zmts/802dc9c3510d79fd40f9dc38a12bccfc

@@ -1,32 +1,15 @@
 package com.example.json.boot_json.models;
 
 
-import javax.persistence.*;
+import java.util.List;
 
 
-@Entity
-@Table(name = "users")
-public class User  {
+public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String lastname;
-    private byte age;
-    private String password;
-
-
-    public User() {
-    }
-
-    public User(String name, String lastname, byte age) {
-        this.name = name;
-        this.lastname = lastname;
-        this.age = age;
-
-    }
-
+    private String lastName;
+    private Byte age;
 
     public Long getId() {
         return id;
@@ -34,6 +17,13 @@ public class User  {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public User(Long id, String name, String lastName, Byte age) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.age = age;
     }
 
     public String getName() {
@@ -44,26 +34,32 @@ public class User  {
         this.name = name;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public byte getAge() {
+    public Byte getAge() {
         return age;
     }
 
-    public void setAge(byte age) {
+    public void setAge(Byte age) {
         this.age = age;
     }
 
-    public String getPassword() {
-        return password;
+    public User() {
     }
 
-
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                '}';
+    }
 }

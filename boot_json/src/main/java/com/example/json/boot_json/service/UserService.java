@@ -1,48 +1,20 @@
 package com.example.json.boot_json.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-import com.example.json.boot_json.models.User;
-import com.example.json.boot_json.repository.UserRepository;
+import org.apache.catalina.User;
 
-import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
-@Service
-@Repository
-public class UserService {
+public interface UserService {
+    List<User> findAll();
 
+    Optional<User> findById(Long id);
 
-    private UserRepository userRepository;
+    User save(User user);
 
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    User updateUser(User user);
 
-    public List<User> allUsers() {
-        return userRepository.findAll();
-    }
+    void deleteUserById(Long id);
 
-    @Transactional
-    public void save(User user) {
-        userRepository.save(user);
-    }
-
-    @Transactional
-    public void update(User user, Long id) {
-        userRepository.saveAndFlush(user);
-    }
-
-    @Transactional
-    public void delete(User user) {
-        userRepository.delete(user);
-    }
-
-    public User getById(Long id) {
-        return userRepository.findById(id).orElse(null);
-    }
+    void deleteUser(User user);
 }
-
-
