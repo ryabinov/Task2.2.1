@@ -1,14 +1,10 @@
 package com.example.json.boot_json.controllers;
 
-
-
+import com.example.json.boot_json.models.User;
 import com.example.json.boot_json.service.UserService;
-import org.apache.catalina.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -26,19 +22,17 @@ public class UserController {
         return userService.findAll();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<User>> getUserById(@PathVariable Long id){
-        return ResponseEntity.ok(userService.findById(id));
+    @PostMapping
+    public ResponseEntity<Void> createUser(@RequestBody User user) {
+        userService.saveUser(user);
+        return ResponseEntity.ok().build();
     }
 
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.save(user));
-    }
 
     @PutMapping
     public ResponseEntity<User> updateUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.updateUser(user));
+        userService.updateUser(user);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete/{id}")

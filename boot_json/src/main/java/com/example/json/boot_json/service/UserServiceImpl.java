@@ -1,7 +1,9 @@
 package com.example.json.boot_json.service;
 
+import com.example.json.boot_json.models.User;
 import com.example.json.boot_json.repository.UserRepository;
-import org.apache.catalina.User;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -23,7 +25,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User save(User user) {
+    public User saveUser(User user) {
         return userRepository.save(user);
     }
 

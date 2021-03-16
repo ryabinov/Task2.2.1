@@ -1,7 +1,6 @@
 package com.example.json.boot_json.service;
 
-import org.apache.catalina.User;
-
+import com.example.json.boot_json.models.User;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,7 +9,7 @@ public interface UserService {
 
     Optional<User> findById(Long id);
 
-    User save(User user);
+    User saveUser(User user);
 
     User updateUser(User user);
 
